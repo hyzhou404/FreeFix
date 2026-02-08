@@ -1,0 +1,15 @@
+base_dir: outputs/llff/trex
+exp_name: sdxl
+refine_start_idx: 0
+refine_end_idx: 40
+train_start_idx: 0
+train_end_idx: 8
+test_split: test
+test_trans: [ 0, 0, 0 ]
+test_rots: [ 0, 0, 0 ]
+prompt: "A large tyrannosaurus fossil is on display in a modern, multi-level building."
+refine_steps: 800
+hessian_attr: [ "means", "quats", "scales" ]
+warp_ratio: 0.3
+data_type: colmap
+load_step: 29999

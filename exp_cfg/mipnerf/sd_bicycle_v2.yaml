@@ -1,0 +1,14 @@
+base_dir: outputs/mipnerf/bicycle_v2
+exp_name: sdxl
+refine_start_idx: 0
+refine_end_idx: 21
+train_start_idx: 0
+train_end_idx: 26
+test_split: test
+test_trans: [ 0, 0, 0 ]
+test_rots: [ 0, 0, 0 ]
+prompt: "A white bicycle is laid to a black park bench. The ground is covered by flat green grass."
+strength: 0.6
+refine_steps: 400
+hessian_attr: [ "means", "quats", "scales" ]
+data_type: colmap

@@ -1,0 +1,20 @@
+exp_name: exp00
+gs_cfg_file: "cfg.json"
+test_split: test_right
+test_trans: [ 0, 0, 0 ] # meters
+test_rots: [ 0, 0, 0 ] # degrees
+hessian_attr: [ "means" ] # [ "means", "quats", "scales" ]
+c_exp_index: [ 0.001, 0.01, 0.1 ]
+c_scheduler: [ 0.3, 0.9, 1.0 ]
+negative_prompt: "blurry, low quality, foggy, overall gray, subtitles, incomplete, ghost image, too close to camera"
+strength: 0.5
+num_inference_steps: 50
+guide_ratio: 1.0
+warp_ratio: 0.5
+refine_max: 5
+refine_steps: 300
+gen_prob: 0.1
+gen_loss_weight: 0.2
+affine: True
+eval: False
+load_step: 29999

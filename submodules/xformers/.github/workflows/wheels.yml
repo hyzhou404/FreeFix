@@ -1,0 +1,121 @@
+name: wheels
+
+on:
+  pull_request:
+    paths:
+      - "packaging/compute_wheel_version.sh"
+      - ".github/workflows/wheel*"
+      - ".github/actions/setup-build-cuda/action.yml"
+      - "setup.py"
+      - "requirements*.txt"
+  push:
+    branches:
+      - main
+    tags:
+      - "v[0-9]+*"
+
+jobs:
+  target_determinator:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+    - id: set-matrix
+      shell: python
+      run: |
+        import os
+        import json
+        import itertools
+        environ = os.environ
+
+        PY_VERSIONS = ['3.9', '3.10', '3.11', '3.12']
+        # NOTE: Don't forget to update `upload_pt`'s matrix
+        # when changing the CUDA/ROCM versions below!
+        CU_VERSIONS = ['118', '121', '124']
+        ROCM_VERSIONS = ["6.1"] # <- 6.0 broken in `manylinux_2_28`
+        PY_CU = list(itertools.product(PY_VERSIONS, CU_VERSIONS))
+        PY_ROCM = list(itertools.product(PY_VERSIONS, ROCM_VERSIONS))
+        print("Full matrix PY_CU", PY_CU)
+        if os.environ["GITHUB_EVENT_NAME"] == "pull_request":
+          print("pull-request: limiting matrix to save resources")
+          PY_CU = [(PY_VERSIONS[0], CU_VERSIONS[0])]
+          for cu in CU_VERSIONS[1:]:
+            PY_CU.append((PY_VERSIONS[-1], cu))
+          print("Limited matrix PY_CU", PY_CU)
+          PY_ROCM = [(PY_VERSIONS[-1], ROCM_VERSIONS[-1])]
+
+        include = []
+        for os in ['8-core-ubuntu', 'windows-8-core']:
+          for torch_version in ['2.5.1']:
+            # CUDA builds
+            for python, cuda_short_version in PY_CU:
+              if cuda_short_version != "124" and "windows" in os:
+                print("Windows builder no longer compatible with cu<124")
+                continue
+              include.append(dict(
+                os=os,
+                python=python,
+                torch_version=torch_version,
+                toolkit_type="cuda",
+                toolkit_short_version=cuda_short_version,
+              ))
+              print(include[-1])
+            # ROCM builds
+            for python, rocm_short_version in PY_ROCM:
+              if os == 'windows-8-core':
+                continue
+              include.append(dict(
+                os="16-core-ubuntu",  # use for ROCm wheels only to avoid CI timeouts
+                python=python,
+                torch_version=torch_version,
+                toolkit_type="rocm",
+                toolkit_short_version=rocm_short_version,
+              ))
+              print(include[-1])
+        matrix = {'include': include}
+        print(json.dumps(matrix))
+        with open(environ["GITHUB_OUTPUT"], "a") as fd:
+          fd.write("matrix="+json.dumps(matrix))
+  build:
+    needs: target_determinator
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.target_determinator.outputs.matrix) }}
+
+    uses: ./.github/workflows/wheels_build.yml
+    if: github.repository == 'facebookresearch/xformers' || github.event_name == 'pull_request'
+    with:
+      os: ${{ matrix.os }}
+      python: ${{ matrix.python }}
+      torch_version: ${{ matrix.torch_version }}
+      toolkit_type: ${{ matrix.toolkit_type }}
+      toolkit_short_version: ${{ matrix.toolkit_short_version }}
+
+  upload_pip:
+    needs: build
+    uses: ./.github/workflows/wheels_upload_pip.yml
+    with:
+      twine_username: __token__
+      filter: "*torch2.5.1+cu121*"
+      execute: ${{ github.repository == 'facebookresearch/xformers' && github.event_name != 'pull_request' }}
+    secrets:
+      twine_password: ${{ secrets.PYPI_TOKEN }}
+
+  upload_pt:
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        suffix:
+          - cu118
+          - cu121
+          - cu124
+          - rocm6.1
+    uses: ./.github/workflows/wheels_upload_s3.yml
+    with:
+      aws_role: "arn:aws:iam::749337293305:role/pytorch_bot_uploader_role"
+      s3_path: s3://pytorch/whl/${{ matrix.suffix }}/
+      aws_s3_cp_extra_args: --acl public-read
+      filter: "*torch2.5.1+${{ matrix.suffix }}*"
+      execute: ${{ github.repository == 'facebookresearch/xformers' && github.ref_type == 'tag' }}
+

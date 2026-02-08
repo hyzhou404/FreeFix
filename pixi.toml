@@ -1,0 +1,56 @@
+[workspace]
+authors = ["hyzhou"]
+channels = ["conda-forge"]
+name = "freefix"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[dependencies]
+python = "==3.11.10"
+setuptools = "==78.1.0"
+
+[pypi-options]
+no-build-isolation = ["pytorch3d", "fisher_rasterize", "unidepth", "xformers"]
+
+[pypi-dependencies]
+torch = { version = "==2.5.1", index = "https://download.pytorch.org/whl/cu118" }
+torchvision = { version = "==0.20.1", index = "https://download.pytorch.org/whl/cu118"}
+torchmetrics = ">=1.7.1, <2"
+tqdm = ">=4.67.1, <5"
+huggingface-hub = ">=0.34.0"
+numpy = ">=1.24.3, <2"
+# numpy = ">=2.0.0"
+iopath = ">=0.1.10, <0.2"
+# diffusers = ">=0.33.1, <0.34"
+gsplat = "==1.1.1"
+transformers = ">=4.52.4, <5"
+accelerate = ">=1.7.0, <2"
+viser = ">=0.2.23, <0.3"
+scikit-learn = ">=1.6.1, <2"
+opencv-python = ">=4.11.0.86, <5"
+tyro = ">=0.9.24, <0.10"
+pillow = ">=11.2.1, <12"
+tensorboard = ">=2.19.0, <3"
+matplotlib = ">=3.10.3, <4"
+imageio-ffmpeg = ">=0.6.0, <0.7"
+imageio = ">=2.37.0, <3"
+open3d = ">=0.18.0, <0.19"
+ipdb = ">=0.13.13, <0.14"
+ftfy = ">=6.3.1, <7"
+einops = ">=0.8.1, <0.9"
+roma = ">=1.5.3, <2"
+sentencepiece = ">=0.2.0, <0.3"
+fire = ">=0.7.0, <0.8"
+ninja = ">=1.11.1.4, <2"
+mmcv = ">=2.2.0, <3"
+omegaconf = ">=2.3.0, <3"
+
+# install from source code
+pytorch3d = { git = "https://github.com/facebookresearch/pytorch3d.git", rev = "v0.7.7" }
+pycolmap = { git = "https://github.com/rmbrualla/pycolmap.git", rev = "cc7ea4b7301720ac29287dbe450952511b32125e" }
+diffusers = { git = "https://github.com/huggingface/diffusers.git", rev = "main" }
+xformers = { git = "https://github.com/facebookresearch/xformers.git", rev = "v0.0.28.post3"}
+unidepth = { path = "submodules/UniDepth", editable=true }
+torch-fidelity = ">=0.3.0, <0.4"
+pytorch-fid = ">=0.3.0, <0.4"
+

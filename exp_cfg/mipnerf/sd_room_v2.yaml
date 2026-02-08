@@ -1,0 +1,14 @@
+base_dir: outputs/mipnerf/room_v2
+exp_name: sdxl
+refine_start_idx: 0
+refine_end_idx: 20
+train_start_idx: 0
+train_end_idx: 35
+test_split: test
+test_trans: [ 0, 0, 0 ]
+test_rots: [ 0, 0, 0 ]
+prompt: "An indoor shot of a living room."
+strength: 0.7
+refine_steps: 400
+hessian_attr: [ "means" ]
+data_type: colmap

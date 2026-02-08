@@ -1,0 +1,16 @@
+base_dir: outputs/llff/horns
+exp_name: sdxl
+refine_start_idx: 0
+refine_end_idx: 40
+train_start_idx: 0
+train_end_idx: 8
+test_split: test
+test_trans: [ 0, 0, 0 ]
+test_rots: [ 0, 0, 0 ]
+prompt: "A fossilized Triceratops skull with large horns is displayed on a stand in a museum. Two other dinosaur skulls are visible on either side, and the background shows a modern building interior with windows and a staircase."
+strength: 0.7
+refine_steps: 800
+hessian_attr: [ "means", "quats", "scales" ]
+warp_ratio: 0.3
+data_type: colmap
+load_step: 29999

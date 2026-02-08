@@ -1,0 +1,21 @@
+__pycache__
+logs
+*output
+outputs
+data
+dbg
+results
+scripts
+# pixi environments
+.pixi
+*.egg-info
+.git_backup
+shell
+view_extrap
+supp
+extrap90
+interp90
+ablations
+huawei
+
+submodules/fisher_rasterize

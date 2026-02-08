@@ -1,0 +1,16 @@
+base_dir: outputs/llff/fern
+exp_name: sdxl
+refine_start_idx: 0
+refine_end_idx: 11
+train_start_idx: 0
+train_end_idx: 5
+test_split: test
+test_trans: [ 0, 0, 0 ]
+test_rots: [ 0, 0, 0 ]
+prompt: "A large, fern-like plant with long, spiky green leaves grows in a white planter inside a modern building."
+strength: 0.7
+refine_steps: 800
+hessian_attr: [ "means", "quats", "scales" ]
+warp_ratio: 0.3
+data_type: colmap
+load_step: 29999

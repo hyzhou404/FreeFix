@@ -1,0 +1,15 @@
+base_dir: outputs/llff/room
+exp_name: flux
+refine_start_idx: 0
+refine_end_idx: 13
+train_start_idx: 0
+train_end_idx: 9
+test_split: test
+test_trans: [ 0, 0, 0 ]
+test_rots: [ 0, 0, 0 ]
+prompt: "A modern conference room with a large black table and matching chairs. A flatscreen TV is mounted on a white wall, with a whiteboard to the left and a cabinet on the right. The room has a distinctive exposed ceiling with lighting fixtures and acoustic panels."
+refine_steps: 800
+hessian_attr: [ "means", "quats", "scales" ]
+warp_ratio: 0.3
+data_type: colmap
+load_step: 29999

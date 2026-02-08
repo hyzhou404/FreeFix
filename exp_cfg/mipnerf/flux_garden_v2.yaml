@@ -1,0 +1,14 @@
+base_dir: outputs/mipnerf/garden_v2
+exp_name: flux
+refine_start_idx: 0
+refine_end_idx: 30
+train_start_idx: 0
+train_end_idx: 30
+test_split: test
+test_trans: [ 0, 0, 0 ]
+test_rots: [ 0, 0, 0 ]
+prompt: "A large, circular wooden patio table with a dark, metallic Lazy Susan in the center. A rustic vase containing dried, decorative branches sits on the Lazy Susan. In the background, there's a lush garden with various plants and well-mowed lawn."
+strength: 0.4
+refine_steps: 400
+hessian_attr: [ "means", "quats", "scales" ]
+data_type: colmap

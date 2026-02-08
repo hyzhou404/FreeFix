@@ -1,0 +1,14 @@
+base_dir: outputs/mipnerf/bonsai_v2
+exp_name: sdxl
+refine_start_idx: 0
+refine_end_idx: 23
+train_start_idx: 0
+train_end_idx: 25
+test_split: test
+test_trans: [ 0, 0, 0 ]
+test_rots: [ 0, 0, 0 ]
+prompt: "A small decorative bonsai tree with pink flowers on a purple, textured cloth"
+strength: 0.6
+refine_steps: 400
+hessian_attr: [ "means" ]
+data_type: colmap

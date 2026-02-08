@@ -1,0 +1,16 @@
+base_dir: outputs/llff/fortress
+exp_name: sdxl
+refine_start_idx: 0
+refine_end_idx: 27
+train_start_idx: 0
+train_end_idx: 8
+test_split: test
+test_trans: [ 0, 0, 0 ]
+test_rots: [ 0, 0, 0 ]
+prompt: "A detailed miniature model of fortress is placed on a light-colored wooden table. The model is a cylindrical tower surrounded by a circular wall."
+strength: 0.7
+refine_steps: 800
+hessian_attr: [ "means", "quats", "scales" ]
+warp_ratio: 0.3
+data_type: colmap
+load_step: 29999

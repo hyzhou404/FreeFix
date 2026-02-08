@@ -1,0 +1,15 @@
+base_dir: outputs/llff/leaves
+exp_name: flux
+refine_start_idx: 0
+refine_end_idx: 18
+train_start_idx: 0
+train_end_idx: 8
+test_split: test
+test_trans: [ 0, 0, 0 ]
+test_rots: [ 0, 0, 0 ]
+prompt: "Various green and yellow leaves from different tropical plants"
+refine_steps: 800
+hessian_attr: [ "means", "quats", "scales" ]
+warp_ratio: 0.3
+data_type: colmap
+load_step: 29999

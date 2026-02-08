@@ -1,0 +1,106 @@
+name: rocm-ci
+
+on: 
+  pull_request:
+    types: [labeled, synchronize, reopened]
+  workflow_dispatch: {}
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build:
+    if: github.repository == 'rocm/xformers'
+    runs-on: self-hosted
+    container:
+      image: 'rocm/pytorch-nightly:latest'
+      options: ' --cap-add=SYS_PTRACE --security-opt seccomp=unconfined --device=/dev/kfd --device=/dev/dri --group-add video --ipc=host --shm-size 8G '
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        path: '_xformers'
+        submodules: 'recursive'
+        set-safe-directory: true
+        fetch-depth: 0
+    - name: Get CPU info on Ubuntu
+      if: contains(runner.os, 'linux')
+      run: |
+        cat /proc/cpuinfo
+    - name: Get env vars
+      run: |
+        echo GITHUB_WORKFLOW   = $GITHUB_WORKFLOW
+        echo HOME              = $HOME
+        echo PWD               = $PWD
+        echo GITHUB_ACTION     = $GITHUB_ACTION
+        echo GITHUB_ACTIONS    = $GITHUB_ACTIONS
+        echo GITHUB_REPOSITORY = $GITHUB_REPOSITORY
+        echo GITHUB_EVENT_NAME = $GITHUB_EVENT_NAME
+        echo GITHUB_EVENT_PATH = $GITHUB_EVENT_PATH
+        echo GITHUB_WORKSPACE  = $GITHUB_WORKSPACE
+        echo GITHUB_SHA        = $GITHUB_SHA
+        echo GITHUB_REF        = $GITHUB_REF
+
+        export GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}
+        echo GIT_BRANCH        = $GIT_BRANCH
+        
+        export ROCM_PATH=/opt/rocm
+        echo ROCM_PATH         = $ROCM_PATH
+
+        hipcc --version
+        rocm-smi
+        rocminfo | grep "gfx"
+        
+    - name: Setup build env
+      run: |
+        conda create -n xformers python=3.11
+        export PATH=/opt/conda/envs/xformers/bin:$PATH
+        python -VV
+        
+        python -m pip install -U torch --index-url=https://download.pytorch.org/whl/nightly/rocm6.1 
+        python -c "import torch; print(f'PyTorch version {torch.__version__}')"
+        
+        python -m pip install ninja scipy pytest pytest-html
+
+    - name: Pre-build clean
+      run: |
+        cd _xformers
+        git clean -ffdx
+        cd ..
+
+    - name: Build xformers
+      run: |
+        export PATH=/opt/conda/envs/xformers/bin:$PATH
+        export MAX_JOBS=144
+        
+        python -m pip install -e ./_xformers --verbose
+        python -m xformers.info
+
+    - name: Run python tests
+      run: |
+        export PATH=/opt/conda/envs/xformers/bin:$PATH
+        
+        python -m pytest --html=test_mem_eff_attention.html --self-contained-html -rpfs ./_xformers/tests/test_mem_eff_attention.py
+    
+    - name: Archive logs
+      if: '!cancelled()'
+      uses: actions/upload-artifact@v4
+      with:
+        name: test results
+        path: test_mem_eff_attention.html
+
+    - name: Post-build clean
+      if: '!cancelled()'
+      run: |
+        cd _xformers
+        git clean -ffdx
+        cd ..
+
+  clean:
+    runs-on: self-hosted
+    if: ${{ needs.build.result != 'skipped' }}
+    needs: [build]
+    steps:
+      - name: Remove dangling Docker images
+        run: |
+          docker images -q -f dangling=true | xargs --no-run-if-empty docker rmi

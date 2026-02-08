@@ -1,0 +1,14 @@
+base_dir: outputs/mipnerf/stump_v2
+exp_name: sdxl
+refine_start_idx: 0
+refine_end_idx: 13
+train_start_idx: 0
+train_end_idx: 19
+test_split: test
+test_trans: [ 0, 0, 0 ]
+test_rots: [ 0, 0, 0 ]
+prompt: "A weathered tree stump, partially covered in ivy, sits in a forest clearing. The ground is a mix of dirt and grass, with other trees and foliage visible in the background."
+strength: 0.6
+refine_steps: 400
+hessian_attr: [ "means", "quats", "scales" ]
+data_type: colmap

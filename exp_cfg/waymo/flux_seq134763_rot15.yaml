@@ -1,0 +1,14 @@
+base_dir: outputs/waymo/seq134763
+exp_name: flux_rot15
+refine_start_idx: 40
+refine_end_idx: 90
+train_start_idx: 30
+train_end_idx: 90
+test_split: train
+test_trans: [ 0, 0, 0 ]
+test_rots: [ 0, 15, 0 ]
+prompt: "An waymo style photorealistic urban street scene, with no pedestrians"
+strength: 0.6
+refine_steps: 400
+gen_prob: 0.2
+data_type: hugsim

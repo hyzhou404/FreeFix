@@ -45,7 +45,7 @@ pixi install
 
 # Data Preparation
 
-Download the sample data from [here](https://huggingface.co/datasets/hyzhou404/FreeFix) (The data will be uploaded later) and extract it to the `data/` directory.
+Download the sample data from [here](https://huggingface.co/datasets/hyzhou404/FreeFix) and save it to the `data/` directory.
 
 # Reconstruction & Refine
 
@@ -57,7 +57,7 @@ Train a 3D Gaussian Splatting model on the training views using the command:
 python -m recon.trainer --data_dir <data_directory> --result_dir <result_directory>
 
 # Example
-python -m recon.trainer --data_dir data/mipnerf/bicycle --result_dir outputs/mipnerf/bicycle_v2 --data_factor 4
+python -m recon.trainer --data_dir data/mipnerf/bicycle_v2 --result_dir outputs/mipnerf/bicycle_v2 --data_factor 4
 ```
 <details>
   <summary>optional arguments</summary>

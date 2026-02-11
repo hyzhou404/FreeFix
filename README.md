@@ -14,7 +14,7 @@
   </p>
   
   > Hongyu Zhou<sup>1</sup>, Zisen Saho<sup>2</sup>, Sheng Miao<sup>1</sup>, Pan Wang<sup>3</sup>, Dongfeng Bai<sup>3</sup>, Bingbing Liu<sup>3</sup>, Yiyi Liao<sup>1,†</sup> <br>
-  > <sup>1</sup> Zhejiang University <sup>1</sup> University of Maryland, College Park <sup>3</sup> Huawei
+  > <sup>1</sup> Zhejiang University <sup>2</sup> University of Maryland, College Park <sup>3</sup> Huawei
   > <sup>†</sup> Corresponding Authors
 
   <img src="assets/teaser.png" width="800" style="display: block; margin: 0 auto;">
